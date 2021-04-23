@@ -15,3 +15,13 @@ model Post {
   title     String
   exerpt    String
 }
+
+model Character {
+  id            Int @id @default(autoincrement())
+  name          String
+  level         String
+  ancestry      String
+  novice_path   String
+  expert_path   String
+  master_path   String
+}

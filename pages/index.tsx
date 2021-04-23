@@ -1,47 +1,33 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import { GetStaticProps } from "next";
-import { Post, PrismaClient } from "@prisma/client";
+import Link from "next/link";
+import { Character, PrismaClient } from "@prisma/client";
+import React from "react";
+import Layout from "../components/layout";
 
 const prisma = new PrismaClient();
 
-export const getStaticProps: GetStaticProps = async () => {
-  const posts = await prisma.post.findMany();
+export const getServerSideProps: GetStaticProps = async () => {
+  const characters = await prisma.character.findMany();
 
   return {
     props: {
-      posts,
+      characters,
     },
   };
 };
 
 interface HomeProps {
-  posts: Post;
+  characters: Character[];
 }
 
-export default function Home({ posts }: HomeProps) {
+export default function Home({ characters }: HomeProps) {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        Make yourself a ninja
-        {JSON.stringify(posts)}
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+    <Layout>
+      {characters.map((character) => (
+        <li>
+          <Link href={`/character/${character.id}`}>{character.name}</Link>
+        </li>
+      ))}
+    </Layout>
   );
 }
