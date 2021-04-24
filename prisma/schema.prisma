@@ -1,27 +1,33 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Post {
-  id        Int @id @default(autoincrement())
-  title     String
-  exerpt    String
+  id     Int    @id @default(autoincrement())
+  title  String
+  exerpt String
 }
 
 model Character {
-  id            Int @id @default(autoincrement())
-  name          String
-  level         String
-  ancestry      String
-  novice_path   String
-  expert_path   String
-  master_path   String
+  id          Int         @id @default(autoincrement())
+  name        String
+  level       String
+  ancestry    String
+  novice_path String
+  expert_path String
+  master_path String
+  attributes  Attribute[]
+}
+
+model Attribute {
+  id          Int       @id @default(autoincrement())
+  name        String
+  value       Int
+  characterId Int
+  character   Character @relation(fields: [characterId], references: [id])
 }

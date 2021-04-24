@@ -1,8 +1,11 @@
 import { GetStaticProps } from "next";
-import { Character, PrismaClient } from "@prisma/client";
+import { Attribute, Character, PrismaClient } from "@prisma/client";
 import React from "react";
 import Layout from "../../components/layout";
 import Input from "../../components/input";
+import BaseInfo from "../../components/character/baseInfo";
+
+export type CharacterDetails = Character & { attributes: Attribute[] };
 
 const prisma = new PrismaClient();
 
@@ -10,6 +13,9 @@ export const getServerSideProps: GetStaticProps = async () => {
   const character = await prisma.character.findFirst({
     where: {
       id: 1,
+    },
+    include: {
+      attributes: true,
     },
   });
 
@@ -21,7 +27,7 @@ export const getServerSideProps: GetStaticProps = async () => {
 };
 
 interface HomeProps {
-  character: Character | undefined;
+  character: CharacterDetails | undefined;
 }
 
 export default function Home({ character }: HomeProps) {
@@ -36,41 +42,17 @@ export default function Home({ character }: HomeProps) {
 
   return (
     <Layout>
-      <Input
-        defaultValue={character.name}
-        field="name"
-        {...sharedInputValues}
-      />
+      <BaseInfo character={character} />
 
-      <Input
-        defaultValue={character.level}
-        field="level"
-        {...sharedInputValues}
-      />
-
-      <Input
-        defaultValue={character.ancestry}
-        field="ancestry"
-        {...sharedInputValues}
-      />
-
-      <Input
-        defaultValue={character.novice_path}
-        field="novice_path"
-        {...sharedInputValues}
-      />
-
-      <Input
-        defaultValue={character.expert_path}
-        field="expert_path"
-        {...sharedInputValues}
-      />
-
-      <Input
-        defaultValue={character.master_path}
-        field="master_path"
-        {...sharedInputValues}
-      />
+      {character.attributes.map((attr) => (
+        <Input
+          endpoint="attribute"
+          id={attr.id}
+          field="value"
+          defaultValue={attr.value}
+          int
+        />
+      ))}
     </Layout>
   );
 }
