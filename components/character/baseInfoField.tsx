@@ -1,6 +1,6 @@
 import React from "react";
 import Input from "../../components/input";
-import { CharacterDetails } from "../../pages/character/[pid]";
+import { CharacterDetails } from "../../context/state";
 
 interface BaseInfoFieldProps {
   character: CharacterDetails;

@@ -18,7 +18,7 @@ export default function AttributeList({
   type,
   characterId,
 }: AttributeListProps) {
-  const { character, setCharacter } = useAppContext();
+  const { character, setCharacter, toggleAttributeFocus } = useAppContext();
   const [name, setName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
@@ -62,6 +62,8 @@ export default function AttributeList({
   const updateName = (e) => {
     setName(e.target.value);
   };
+  const selectAttribute = (attribute: Attribute) => () =>
+    toggleAttributeFocus(attribute);
 
   return (
     <div className="flex flex-col border-gray-900 rounded-sm border-2">
@@ -95,7 +97,11 @@ export default function AttributeList({
       </div>
       <div className="divide-y divide-gray-300 divide-solid flex flex-col">
         {attributes.map((attr) => (
-          <button key={attr.id} className="hover:bg-gray-300 text-left px-2">
+          <button
+            key={attr.id}
+            className="hover:bg-gray-300 text-left px-2"
+            onClick={selectAttribute(attr)}
+          >
             {attr.name}
           </button>
         ))}

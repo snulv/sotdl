@@ -1,13 +1,12 @@
 import { GetStaticProps } from "next";
-import { Attribute, Character, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import React, { useEffect } from "react";
 import Layout from "../../components/layout";
 import AttributeField from "../../components/character/attributeField";
 import BaseInfoField from "../../components/character/baseInfoField";
 import AttributeList from "../../components/character/attributeList";
-import { useAppContext } from "../../context/state";
-
-export type CharacterDetails = Character & { attributes: Attribute[] };
+import { CharacterDetails, useAppContext } from "../../context/state";
+import AttributeDetails from "../../components/character/attributeDetails";
 
 const prisma = new PrismaClient();
 
@@ -33,7 +32,7 @@ interface HomeProps {
 }
 
 export default function Home({ character: defaultCharacter }: HomeProps) {
-  const { character, setCharacter } = useAppContext();
+  const { character, setCharacter, focusedAttributes } = useAppContext();
   useEffect(() => {
     setCharacter(defaultCharacter);
   }, []);
@@ -95,7 +94,12 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
               )}
             />
           </div>
-          <div>-</div>
+          <div>
+            <AttributeDetails
+              attributes={focusedAttributes}
+              characterId={character.id}
+            />
+          </div>
         </div>
       </div>
     </Layout>
