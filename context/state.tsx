@@ -1,13 +1,21 @@
 // src/context/state.js
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from "react";
+import { CharacterDetails } from "../pages/character/[pid]";
 
-const AppContext = createContext({});
+interface IAppContext {
+  character: CharacterDetails | undefined;
+  setCharacter: (character: CharacterDetails) => void;
+}
+
+const AppContext = createContext({} as IAppContext);
 
 export function AppWrapper({ children }) {
-  let sharedState = {/* whatever you want */}
+  const [character, setCharacter] = useState<CharacterDetails | undefined>(
+    undefined
+  );
 
   return (
-    <AppContext.Provider value={sharedState}>
+    <AppContext.Provider value={{ character, setCharacter }}>
       {children}
     </AppContext.Provider>
   );
@@ -16,4 +24,3 @@ export function AppWrapper({ children }) {
 export function useAppContext() {
   return useContext(AppContext);
 }
-

@@ -8,9 +8,18 @@ interface IProps {
   id: number;
   className?: string;
   int?: boolean;
+  name?: string;
 }
 
-function input({ defaultValue, field, endpoint, id, int, className }: IProps) {
+function input({
+  defaultValue,
+  field,
+  endpoint,
+  id,
+  int,
+  name,
+  className,
+}: IProps) {
   const [value, setValue] = useState(defaultValue);
   const onBlur = () => {
     fetch(`/api/${endpoint}/${id}`, {
@@ -29,6 +38,7 @@ function input({ defaultValue, field, endpoint, id, int, className }: IProps) {
 
   return (
     <input
+      name={!name ? field : name}
       className={className ? className : "border-gray-500 border-2 rounded-sm"}
       value={value}
       onChange={onChange}

@@ -27,7 +27,11 @@ model Character {
 model Attribute {
   id          Int       @id @default(autoincrement())
   name        String
-  value       Int
+  type        String    @default("Base")
+  description String?
+  value       Int       @default(0)
+  max         Int       @default(0)
+  current     Int       @default(0)
   characterId Int
   character   Character @relation(fields: [characterId], references: [id])
 }

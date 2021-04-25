@@ -22,13 +22,31 @@ const handlePut = async (query, body) => {
   return { update: "OK" };
 };
 
+const handlePost = async (query, body) => {
+  if (!query.pid) {
+    return;
+  }
+
+  try {
+    await prisma.attribute.create({
+      data: body,
+    });
+  } catch (e) {
+    console.debug(e);
+    return;
+  }
+
+  return { update: "OK" };
+};
+
 const handledMethods = {
   PUT: handlePut,
+  POST: handlePost,
 };
 
 export default async (req, res) => {
   if (!handledMethods[req.method]) {
-    res.status(400).json({ error: req.method + " Not handled bro" });
+    res.status(400).json({ error: req.method + ": Not handled bro" });
     return;
   }
   const response = await handledMethods[req.method](req.query, req.body);

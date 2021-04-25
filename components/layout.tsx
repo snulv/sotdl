@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ReactNode } from "react";
-import styles from "../styles/Home.module.css";
 import Head from "next/head";
 
 interface IProps {
@@ -9,15 +8,15 @@ interface IProps {
 
 function layout({ children }: IProps) {
   return (
-    <div className={styles.container}>
+    <div className="flex flex-col min-h-screen">
       <Head>
         <title>Shadows</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>{children}</main>
+      <main className="flex-grow">{children}</main>
 
-      <footer className={styles.footer}>
+      <footer className="flex-grow-0 flex justify-center py-4">
         Tradition is not the worship of ashes, but keeping the flame alive.
       </footer>
     </div>

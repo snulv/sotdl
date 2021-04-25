@@ -8,7 +8,7 @@ const handlePut = async (query, body) => {
   }
 
   try {
-    await prisma.attribute.update({
+    await prisma.character.update({
       data: body,
       where: {
         id: Number(query.pid),
