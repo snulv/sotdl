@@ -4,13 +4,14 @@ import React from "react";
 import Layout from "../../components/layout";
 import AttributeField from "../../components/character/attributeField";
 import BaseInfoField from "../../components/character/baseInfoField";
-import AttributeList from "../../components/character/attributeList";
+import CoreAttributeList from "../../components/character/coreAttributeList";
 import { CharacterDetails, useAppContext } from "../../context/state";
 import AttributeDetails from "../../components/character/attributeDetails";
 import useCharacterDetailsState from "../../context/useCharacterDetailsState";
 import { useInterval } from "react-use";
 import { characterDetailsReceivedAction } from "../../context/characterReducer";
 import CharacterTabs from "../../components/character/characterTabs";
+import WeaponList from "../../components/character/weaponList";
 
 const prisma = new PrismaClient();
 
@@ -65,15 +66,22 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
       <CharacterTabs characterId={characterId} />
       <div className="flex">
         <div className="flex-grow grid gap-4 grid-cols-1 sm:grid-cols-2 p-3">
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
-            <BaseInfoField character={character} field="name" />
-            <BaseInfoField character={character} field="level" />
-            <BaseInfoField character={character} field="ancestry" />
-            <BaseInfoField character={character} field="novice_path" />
-            <BaseInfoField character={character} field="expert_path" />
-            <BaseInfoField character={character} field="master_path" />
+          <div>
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+              <BaseInfoField character={character} field="name" />
+              <BaseInfoField character={character} field="level" />
+              <BaseInfoField character={character} field="ancestry" />
+              <BaseInfoField character={character} field="novice_path" />
+              <BaseInfoField character={character} field="expert_path" />
+              <BaseInfoField character={character} field="master_path" />
+            </div>
           </div>
-          <div>{character.name}</div>
+          <div>
+            <WeaponList
+              characterId={characterId}
+              attributes={attributes.filter((attr) => attr.type === "Weapons")}
+            />
+          </div>
           <div>
             <div className="max-w-xs max-h-80 grid gap-4 grid-flow-col grid-rows-4">
               {attributes
@@ -84,41 +92,41 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
             </div>
           </div>
 
-          <div className="grid gap-4 grid-flow-col grid-rows-4">
-            <AttributeList
-              characterId={characterId}
-              type="Ancestry"
-              attributes={attributes.filter((attr) => attr.type === "Ancestry")}
-            />
-            <AttributeList
+          <div className="grid gap-4 grid-flow-col grid-rows-3">
+            <CoreAttributeList
               characterId={characterId}
               type="Novice_path"
               attributes={attributes.filter(
                 (attr) => attr.type === "Novice_path"
               )}
             />
-            <AttributeList
+            <CoreAttributeList
               characterId={characterId}
               type="Expert_path"
               attributes={attributes.filter(
                 (attr) => attr.type === "Expert_path"
               )}
             />
-            <AttributeList
+            <CoreAttributeList
               characterId={characterId}
               type="Master_path"
               attributes={attributes.filter(
                 (attr) => attr.type === "Master_path"
               )}
             />
-            <AttributeList
+            <CoreAttributeList
+              characterId={characterId}
+              type="Ancestry"
+              attributes={attributes.filter((attr) => attr.type === "Ancestry")}
+            />
+            <CoreAttributeList
               characterId={characterId}
               type="Professions"
               attributes={attributes.filter(
                 (attr) => attr.type === "Professions"
               )}
             />
-            <AttributeList
+            <CoreAttributeList
               characterId={characterId}
               type="Languages"
               attributes={attributes.filter(

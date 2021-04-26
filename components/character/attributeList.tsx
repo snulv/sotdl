@@ -1,24 +1,21 @@
 import { Attribute } from "@prisma/client";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
-  PlusCircleIcon,
   CheckCircleIcon,
+  PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/solid";
 import { useAppContext } from "../../context/state";
-import {
-  attributeCreatedAction,
-  toggleAttributeFocusAction,
-} from "../../context/characterReducer";
+import { attributeCreatedAction } from "../../context/characterReducer";
 
 interface AttributeListProps {
-  attributes: Attribute[];
+  children: ReactNode;
   characterId: number;
   type: string;
 }
 
 export default function AttributeList({
-  attributes,
+  children,
   type,
   characterId,
 }: AttributeListProps) {
@@ -27,6 +24,9 @@ export default function AttributeList({
   const [isCreating, setIsCreating] = useState(false);
 
   const createNew = () => {
+    if (!name) {
+      return;
+    }
     const newAttribute = {
       name,
       type,
@@ -66,50 +66,40 @@ export default function AttributeList({
       createNew();
     }
   };
-  const selectAttribute = (attribute: Attribute) => () =>
-    dispatch(toggleAttributeFocusAction(attribute.id));
 
   return (
     <div className="flex flex-col border-gray-900 rounded-sm border-2">
       <div className="flex bg-gray-900 text-gray-200 items-center p-2">
         {!isCreating ? (
           <>
-            <span className="flex-grow capitalize">
+            <span className="flex-grow capitalize text-xs">
               {type.replace("_", " ")}
             </span>
-            <button onClick={startCreating} className="w-5 ml-2 text-green-600">
+            <button onClick={startCreating} className="w-4 ml-2 text-green-600">
               <PlusCircleIcon />
             </button>
           </>
         ) : (
           <>
             <input
-              className="flex-grow text-black"
+              className="flex-grow text-black text-xs"
               type="text"
               autoFocus
               value={name}
               onChange={updateName}
               onKeyDown={handleKeyPress}
             />
-            <button onClick={createNew} className="w-5 ml-2 text-green-600">
+            <button onClick={createNew} className="w-4 ml-2 text-green-600">
               <CheckCircleIcon />
             </button>
-            <button onClick={stopCreating} className="w-5 ml-2 text-red-600">
+            <button onClick={stopCreating} className="w-4 ml-2 text-red-600">
               <XCircleIcon />
             </button>
           </>
         )}
       </div>
       <div className="divide-y divide-gray-300 divide-solid flex flex-col">
-        {attributes.map((attr) => (
-          <button
-            key={attr.id}
-            className="hover:bg-gray-300 text-left px-2"
-            onClick={selectAttribute(attr)}
-          >
-            {attr.name}
-          </button>
-        ))}
+        {children}
       </div>
     </div>
   );
