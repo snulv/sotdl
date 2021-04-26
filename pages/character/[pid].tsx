@@ -1,12 +1,16 @@
 import { GetStaticProps } from "next";
 import { PrismaClient } from "@prisma/client";
-import React, { useEffect } from "react";
+import React from "react";
 import Layout from "../../components/layout";
 import AttributeField from "../../components/character/attributeField";
 import BaseInfoField from "../../components/character/baseInfoField";
 import AttributeList from "../../components/character/attributeList";
 import { CharacterDetails, useAppContext } from "../../context/state";
 import AttributeDetails from "../../components/character/attributeDetails";
+import useCharacterDetailsState from "../../context/useCharacterDetailsState";
+import { useInterval } from "react-use";
+import { characterDetailsReceivedAction } from "../../context/characterReducer";
+import CharacterTabs from "../../components/character/characterTabs";
 
 const prisma = new PrismaClient();
 
@@ -34,10 +38,24 @@ interface HomeProps {
 }
 
 export default function Home({ character: defaultCharacter }: HomeProps) {
-  const { character, setCharacter, focusedAttributes } = useAppContext();
-  useEffect(() => {
-    setCharacter(defaultCharacter);
-  }, []);
+  const characterId = defaultCharacter.id;
+  const { dispatch } = useAppContext();
+  const { character, attributes, focusedAttributes } = useCharacterDetailsState(
+    defaultCharacter
+  );
+  useInterval(() => {
+    fetch(`/api/character/${characterId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((character) => {
+        dispatch(characterDetailsReceivedAction(character));
+      });
+  }, 5000);
+
   if (!character) {
     return <Layout>Character not found</Layout>;
   }
@@ -45,6 +63,7 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
   return (
     <Layout>
       <div className="p-3">
+        <CharacterTabs characterId={characterId} />
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
             <BaseInfoField character={character} field="name" />
@@ -54,11 +73,11 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
             <BaseInfoField character={character} field="expert_path" />
             <BaseInfoField character={character} field="master_path" />
           </div>
-          <div>-</div>
+          <div>{character.name}</div>
           <div>-</div>
           <div>
             <div className="max-w-xs max-h-80 grid gap-4 grid-flow-col grid-rows-4">
-              {character.attributes
+              {attributes
                 .filter((attr) => attr.type === "Base")
                 .map((attr) => (
                   <AttributeField key={attr.id} attribute={attr} />
@@ -68,30 +87,28 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
 
           <div className="grid gap-4 grid-flow-col grid-rows-2">
             <AttributeList
-              characterId={character.id}
+              characterId={characterId}
               type="Ancestry"
-              attributes={character.attributes.filter(
-                (attr) => attr.type === "Ancestry"
-              )}
+              attributes={attributes.filter((attr) => attr.type === "Ancestry")}
             />
             <AttributeList
-              characterId={character.id}
+              characterId={characterId}
               type="Novice_path"
-              attributes={character.attributes.filter(
+              attributes={attributes.filter(
                 (attr) => attr.type === "Novice_path"
               )}
             />
             <AttributeList
-              characterId={character.id}
+              characterId={characterId}
               type="Expert_path"
-              attributes={character.attributes.filter(
+              attributes={attributes.filter(
                 (attr) => attr.type === "Expert_path"
               )}
             />
             <AttributeList
-              characterId={character.id}
+              characterId={characterId}
               type="Master_path"
-              attributes={character.attributes.filter(
+              attributes={attributes.filter(
                 (attr) => attr.type === "Master_path"
               )}
             />
@@ -99,7 +116,7 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
           <div>
             <AttributeDetails
               attributes={focusedAttributes}
-              characterId={character.id}
+              characterId={characterId}
             />
           </div>
         </div>

@@ -6,6 +6,10 @@ import {
   XCircleIcon,
 } from "@heroicons/react/solid";
 import { useAppContext } from "../../context/state";
+import {
+  attributeCreatedAction,
+  toggleAttributeFocus,
+} from "../../context/characterReducer";
 
 interface AttributeListProps {
   attributes: Attribute[];
@@ -18,7 +22,7 @@ export default function AttributeList({
   type,
   characterId,
 }: AttributeListProps) {
-  const { character, setCharacter, toggleAttributeFocus } = useAppContext();
+  const { dispatch } = useAppContext();
   const [name, setName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
@@ -40,16 +44,11 @@ export default function AttributeList({
       body: JSON.stringify(newAttribute),
     })
       .then((data) => data.json())
-      .then((data) => {
+      .then((attribute: Attribute) => {
         setName("");
         setIsCreating(false);
-        setCharacter({
-          ...character,
-          attributes: [
-            ...character.attributes,
-            { ...newAttribute, id: data.created },
-          ],
-        });
+
+        dispatch(attributeCreatedAction(attribute));
       });
   };
   const startCreating = () => {
@@ -62,8 +61,13 @@ export default function AttributeList({
   const updateName = (e) => {
     setName(e.target.value);
   };
+  const handleKeyPress = (e) => {
+    if (e.keyCode == 13) {
+      createNew();
+    }
+  };
   const selectAttribute = (attribute: Attribute) => () =>
-    toggleAttributeFocus(attribute);
+    dispatch(toggleAttributeFocus(attribute.id));
 
   return (
     <div className="flex flex-col border-gray-900 rounded-sm border-2">
@@ -85,6 +89,7 @@ export default function AttributeList({
               autoFocus
               value={name}
               onChange={updateName}
+              onKeyDown={handleKeyPress}
             />
             <button onClick={createNew} className="w-5 ml-2 text-green-600">
               <CheckCircleIcon />

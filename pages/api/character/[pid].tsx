@@ -8,7 +8,7 @@ const handlePut = async (query, body) => {
   }
 
   try {
-    await prisma.character.update({
+    return await prisma.character.update({
       data: body,
       where: {
         id: Number(query.pid),
@@ -18,12 +18,31 @@ const handlePut = async (query, body) => {
     console.debug(e);
     return;
   }
+};
 
-  return { update: "OK" };
+const handleGet = async (query, body) => {
+  if (!query.pid) {
+    return;
+  }
+
+  try {
+    return await prisma.character.findFirst({
+      where: {
+        id: Number(query.pid),
+      },
+      include: {
+        attributes: true,
+      },
+    });
+  } catch (e) {
+    console.debug(e);
+    return;
+  }
 };
 
 const handledMethods = {
   PUT: handlePut,
+  GET: handleGet,
 };
 
 export default async (req, res) => {

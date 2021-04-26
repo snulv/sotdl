@@ -1,39 +1,32 @@
 // src/context/state.js
 import { Character, Attribute } from "@prisma/client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
+import {
+  CHARACTER_ACTION_TYPES,
+  characterReducer,
+  ICharacterState,
+  initialCharacterState,
+} from "./characterReducer";
 
 export type CharacterDetails = Character & { attributes: Attribute[] };
 
 interface IAppContext {
-  character: CharacterDetails | undefined;
-  setCharacter: (character: CharacterDetails) => void;
-  focusedAttributes: Attribute[];
-  toggleAttributeFocus: (attribute: Attribute) => void;
+  characterState: ICharacterState;
+  dispatch: (action: CHARACTER_ACTION_TYPES) => void;
 }
 
 const AppContext = createContext({} as IAppContext);
 
 export function AppWrapper({ children }) {
-  const [character, setCharacter] = useState<CharacterDetails | undefined>(
-    undefined
+  const [characterState, dispatch] = useReducer(
+    characterReducer,
+    initialCharacterState
   );
-  const [focusedAttributes, setFocusedAttributes] = useState<Attribute[]>([]);
-  const toggleAttributeFocus = (attribute: Attribute) => {
-    if (focusedAttributes.find((i) => i.id === attribute.id)) {
-      setFocusedAttributes(
-        focusedAttributes.filter((i) => i.id !== attribute.id)
-      );
-      return;
-    }
-    setFocusedAttributes([...focusedAttributes, attribute]);
-  };
   return (
     <AppContext.Provider
       value={{
-        character,
-        setCharacter,
-        focusedAttributes,
-        toggleAttributeFocus,
+        characterState,
+        dispatch,
       }}
     >
       {children}

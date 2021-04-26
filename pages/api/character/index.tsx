@@ -51,8 +51,18 @@ const handlePost = async (query, body) => {
   }
 };
 
+const handleGet = async (query, body) => {
+  try {
+    return await prisma.character.findMany();
+  } catch (e) {
+    console.debug(e);
+    return;
+  }
+};
+
 const handledMethods = {
   POST: handlePost,
+  GET: handleGet,
 };
 
 export default async (req, res) => {

@@ -1,17 +1,17 @@
+import { Character } from "@prisma/client";
 import React from "react";
 import Input from "../../components/input";
-import { CharacterDetails } from "../../context/state";
 
 interface BaseInfoFieldProps {
-  character: CharacterDetails;
-  field: keyof CharacterDetails;
+  character: Character;
+  field: keyof Character;
 }
 
 export default function BaseInfoField({
   character,
   field,
 }: BaseInfoFieldProps) {
-  if (field === "attributes") {
+  if (field === "updatedAt") {
     console.error("This attribute is not handled by [BaseInfoField]");
     return null;
   }

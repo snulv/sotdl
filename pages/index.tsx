@@ -1,9 +1,14 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import { Character, PrismaClient } from "@prisma/client";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import Layout from "../components/layout";
 import { useRouter } from "next/router";
+import { useAppContext } from "../context/state";
+import {
+  characterCreatedAction,
+  characterListReceivedAction,
+} from "../context/characterReducer";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +27,15 @@ interface HomeProps {
 }
 
 export default function Home({ characters }: HomeProps) {
+  const { characterState, dispatch } = useAppContext();
+
+  useEffect(() => {
+    dispatch(characterListReceivedAction(characters));
+  }, []);
+  const reducedCharacters = useMemo(
+    () => Object.values(characterState.characters),
+    [characterState.characters]
+  );
   const router = useRouter();
   const createNew = () => {
     fetch(`/api/character`, {
@@ -29,24 +43,29 @@ export default function Home({ characters }: HomeProps) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({}),
     })
       .then((data) => data.json())
-      .then((data) => {
-        console.debug(data);
-        router.push(`/character/${data.id}`);
+      .then((character: Character) => {
+        dispatch(characterCreatedAction(character));
+        router.push(`/character/${character.id}`);
       });
   };
   return (
     <Layout>
-      <button onClick={createNew}>Add new character</button>
-      {characters.map((character) => (
-        <li>
-          <Link href={`/character/${character.id}`}>
-            {character.name || "Unnamed"}
-          </Link>
-        </li>
-      ))}
+      <div className="flex justify-center align-middle">
+        <div>
+          <button onClick={createNew}>Add new character</button>
+          <ul className="flex flex-col">
+            {reducedCharacters.map((character) => (
+              <li key={character.id}>
+                <Link href={`/character/${character.id}`}>
+                  {character.name || "Unnamed"}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </Layout>
   );
 }

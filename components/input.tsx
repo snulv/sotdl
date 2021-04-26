@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IProps {
   defaultValue: string | number;
@@ -21,6 +21,9 @@ function input({
   className,
 }: IProps) {
   const [value, setValue] = useState(defaultValue);
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
   const onBlur = () => {
     fetch(`/api/${endpoint}/${id}`, {
       method: "PUT",

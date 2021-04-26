@@ -4,10 +4,9 @@ const prisma = new PrismaClient();
 
 const handlePost = async (query, body) => {
   try {
-    const attribute = await prisma.attribute.create({
+    return await prisma.attribute.create({
       data: body,
     });
-    return { created: attribute.id };
   } catch (e) {
     console.debug(e);
     return;

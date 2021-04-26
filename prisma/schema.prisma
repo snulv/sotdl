@@ -21,6 +21,7 @@ model Character {
   novice_path String
   expert_path String
   master_path String
+  updatedAt   DateTime @updatedAt @default(now())
   attributes  Attribute[]
 }
 
@@ -33,5 +34,6 @@ model Attribute {
   max         Int       @default(0)
   current     Int       @default(0)
   characterId Int
+  updatedAt   DateTime @updatedAt @default(now())
   character   Character @relation(fields: [characterId], references: [id])
 }
