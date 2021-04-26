@@ -10,10 +10,12 @@ import AttributeDetails from "../../components/character/attributeDetails";
 
 const prisma = new PrismaClient();
 
-export const getServerSideProps: GetStaticProps = async () => {
+export const getServerSideProps: GetStaticProps = async (context) => {
+  const { pid } = context.params;
+
   const character = await prisma.character.findFirst({
     where: {
-      id: 1,
+      id: Number(pid),
     },
     include: {
       attributes: true,
