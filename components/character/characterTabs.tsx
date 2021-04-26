@@ -41,12 +41,12 @@ function CharacterTabs({ characterId }: IProps) {
   });
 
   return (
-    <ul className="flex mb-3">
+    <ul className="flex border-b border-gray-900">
       {reducedCharacters.map((character) => (
         <li key={character.id}>
           <Link href={`/character/${character.id}`}>
             <span
-              className={`block py-2 px-4 border-b border-l border-gray-900 hover:bg-gray-100 cursor-pointer${
+              className={`block py-2 px-4 border-l border-gray-900 hover:bg-gray-100 cursor-pointer${
                 characterId === character.id ? " bg-gray-300" : ""
               }`}
             >

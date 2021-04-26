@@ -8,6 +8,7 @@ interface IProps {
   id: number;
   className?: string;
   int?: boolean;
+  area?: boolean;
   name?: string;
 }
 
@@ -17,6 +18,7 @@ function input({
   endpoint,
   id,
   int,
+  area,
   name,
   className,
 }: IProps) {
@@ -38,6 +40,20 @@ function input({
   const onChange = (e) => {
     setValue(!int ? e.target.value : Number(e.target.value));
   };
+
+  if (area) {
+    return (
+      <textarea
+        name={!name ? field : name}
+        className={
+          className ? className : "border-gray-500 border-2 rounded-sm"
+        }
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    );
+  }
 
   return (
     <input

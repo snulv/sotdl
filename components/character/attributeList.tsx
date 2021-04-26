@@ -8,7 +8,7 @@ import {
 import { useAppContext } from "../../context/state";
 import {
   attributeCreatedAction,
-  toggleAttributeFocus,
+  toggleAttributeFocusAction,
 } from "../../context/characterReducer";
 
 interface AttributeListProps {
@@ -67,7 +67,7 @@ export default function AttributeList({
     }
   };
   const selectAttribute = (attribute: Attribute) => () =>
-    dispatch(toggleAttributeFocus(attribute.id));
+    dispatch(toggleAttributeFocusAction(attribute.id));
 
   return (
     <div className="flex flex-col border-gray-900 rounded-sm border-2">

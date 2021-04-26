@@ -62,9 +62,9 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
 
   return (
     <Layout>
-      <div className="p-3">
-        <CharacterTabs characterId={characterId} />
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+      <CharacterTabs characterId={characterId} />
+      <div className="flex">
+        <div className="flex-grow grid gap-4 grid-cols-1 sm:grid-cols-2 p-3">
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
             <BaseInfoField character={character} field="name" />
             <BaseInfoField character={character} field="level" />
@@ -74,7 +74,6 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
             <BaseInfoField character={character} field="master_path" />
           </div>
           <div>{character.name}</div>
-          <div>-</div>
           <div>
             <div className="max-w-xs max-h-80 grid gap-4 grid-flow-col grid-rows-4">
               {attributes
@@ -85,7 +84,7 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
             </div>
           </div>
 
-          <div className="grid gap-4 grid-flow-col grid-rows-2">
+          <div className="grid gap-4 grid-flow-col grid-rows-4">
             <AttributeList
               characterId={characterId}
               type="Ancestry"
@@ -112,13 +111,24 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
                 (attr) => attr.type === "Master_path"
               )}
             />
-          </div>
-          <div>
-            <AttributeDetails
-              attributes={focusedAttributes}
+            <AttributeList
               characterId={characterId}
+              type="Professions"
+              attributes={attributes.filter(
+                (attr) => attr.type === "Professions"
+              )}
+            />
+            <AttributeList
+              characterId={characterId}
+              type="Languages"
+              attributes={attributes.filter(
+                (attr) => attr.type === "Languages"
+              )}
             />
           </div>
+        </div>
+        <div className="w-80 border-l border-gray-900">
+          <AttributeDetails attributes={focusedAttributes} />
         </div>
       </div>
     </Layout>

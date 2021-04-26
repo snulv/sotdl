@@ -50,7 +50,7 @@ export const attributeCreatedAction = (attribute: Attribute) =>
     },
   } as const);
 
-export const toggleAttributeFocus = (attributeId: number) =>
+export const toggleAttributeFocusAction = (attributeId: number) =>
   ({
     type: "TOGGLE_ATTRIBUTE_FOCUS",
     payload: {
@@ -63,7 +63,7 @@ export type CHARACTER_ACTION_TYPES =
   | ReturnType<typeof characterDetailsReceivedAction>
   | ReturnType<typeof characterCreatedAction>
   | ReturnType<typeof attributeCreatedAction>
-  | ReturnType<typeof toggleAttributeFocus>;
+  | ReturnType<typeof toggleAttributeFocusAction>;
 
 export const characterReducer = (
   state: ICharacterState,

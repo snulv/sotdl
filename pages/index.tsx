@@ -52,7 +52,7 @@ export default function Home({ characters }: HomeProps) {
   };
   return (
     <Layout>
-      <div className="flex justify-center align-middle">
+      <div className="flex justify-center items-center">
         <div>
           <button onClick={createNew}>Add new character</button>
           <ul className="flex flex-col">

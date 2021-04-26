@@ -1,47 +1,64 @@
 import { Attribute } from "@prisma/client";
 import React from "react";
 import Input from "../input";
+import { useAppContext } from "../../context/state";
+import { toggleAttributeFocusAction } from "../../context/characterReducer";
+import { XCircleIcon } from "@heroicons/react/solid";
 
 interface AttributeDetailsProps {
   attributes: Attribute[];
-  characterId: number;
 }
 
 export default function AttributeDetails({
   attributes,
-  characterId,
 }: AttributeDetailsProps) {
+  const { dispatch } = useAppContext();
+
+  const handleCloseAttribute = (attributeId: number) => () => {
+    dispatch(toggleAttributeFocusAction(attributeId));
+  };
   return (
-    <div className="flex flex-col border-gray-900 rounded-sm border-2">
+    <div className="flex flex-col">
       <div className="divide-y divide-gray-300 divide-solid flex flex-col">
         {attributes.map((attribute) => (
-          <button
-            key={attribute.id}
-            className="hover:bg-gray-300 text-left px-2"
-          >
+          <div key={attribute.id} className="text-left p-2 bg-gray-100">
             <div className="flex flex-col">
-              <Input
-                endpoint="attribute"
-                id={attribute.id}
-                field="name"
-                defaultValue={attribute.name}
-                className="border-gray-500 border-2 rounded-sm text-center"
-              />
               <label htmlFor="name" className="capitalize text-xs">
-                Name {attribute.name}
+                Name
+              </label>
+              <div className="flex items-center">
+                <div className="w-6/6">
+                  <Input
+                    endpoint="attribute"
+                    id={attribute.id}
+                    field="name"
+                    defaultValue={attribute.name}
+                    className="border-gray-500 border rounded-sm px-1"
+                  />
+                </div>
+                <div className="w-1/6 flex items-center">
+                  <button
+                    onClick={handleCloseAttribute(attribute.id)}
+                    className="w-5 ml-2 text-red-600"
+                  >
+                    <XCircleIcon />
+                  </button>
+                </div>
+              </div>
+
+              <label htmlFor="description" className="capitalize text-xs">
+                Description
               </label>
               <Input
                 endpoint="attribute"
                 id={attribute.id}
                 field="description"
                 defaultValue={attribute.description}
-                className="border-gray-500 border-2 rounded-sm text-center"
+                area
+                className="border-gray-500 leading-4 border rounded-sm p-1"
               />
-              <label htmlFor="description" className="capitalize text-xs">
-                Description
-              </label>
             </div>
-          </button>
+          </div>
         ))}
       </div>
     </div>
