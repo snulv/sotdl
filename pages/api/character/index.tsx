@@ -2,13 +2,29 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const createAttribute = async (name: string, characterId: number) =>
-  await prisma.attribute.create({
+const createAttribute = async (
+  name: string,
+  characterId: number,
+  subAttributes?: string[]
+) => {
+  const attribute = await prisma.attribute.create({
     data: {
       name,
       characterId,
     },
   });
+
+  if (!subAttributes) return;
+
+  for (const item of subAttributes) {
+    await prisma.subAttribute.create({
+      data: {
+        type: item,
+        attributeId: attribute.id,
+      },
+    });
+  }
+};
 
 const handlePost = async (query, body) => {
   try {
@@ -23,26 +39,30 @@ const handlePost = async (query, body) => {
       },
     });
 
-    await createAttribute("Strength", id);
-    await createAttribute("Agility", id);
-    await createAttribute("Intelligence", id);
-    await createAttribute("Will", id);
+    await createAttribute("Strength", id, ["Modifier"]);
+    await createAttribute("Agility", id, ["Modifier"]);
+    await createAttribute("Intelligence", id, ["Modifier"]);
+    await createAttribute("Will", id, ["Modifier"]);
     await createAttribute("Health", id);
     await createAttribute("Defense", id);
-    await createAttribute("Perception", id);
+    await createAttribute("Perception", id, ["Modifier"]);
     await createAttribute("Insanity", id);
     await createAttribute("Damage", id);
     await createAttribute("Speed", id);
     await createAttribute("Inspiration", id);
     await createAttribute("Corruption", id);
-    await createAttribute("Regen", id);
+    await createAttribute("Regen", id, ["Multiplier"]);
     await createAttribute("Size", id);
     return await prisma.character.findFirst({
       where: {
         id,
       },
       include: {
-        attributes: true,
+        attributes: {
+          include: {
+            subAttributes: true,
+          },
+        },
       },
     });
   } catch (e) {

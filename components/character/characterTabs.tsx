@@ -1,9 +1,15 @@
 import * as React from "react";
 import { useMemo } from "react";
 import { useAppContext } from "../../context/state";
-import { characterListReceivedAction } from "../../context/characterReducer";
+import {
+  characterCreatedAction,
+  characterListReceivedAction,
+} from "../../context/characterReducer";
 import Link from "next/link";
 import { useInterval, useMount } from "react-use";
+import { useRouter } from "next/router";
+import { Character } from "@prisma/client";
+import { PlusCircleIcon } from "@heroicons/react/solid";
 
 interface IProps {
   characterId: number;
@@ -11,6 +17,21 @@ interface IProps {
 
 function CharacterTabs({ characterId }: IProps) {
   const { characterState, dispatch } = useAppContext();
+  const router = useRouter();
+
+  const createNew = () => {
+    fetch(`/api/character`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((data) => data.json())
+      .then((character: Character) => {
+        dispatch(characterCreatedAction(character));
+        router.push(`/character/${character.id}`);
+      });
+  };
 
   const reducedCharacters = useMemo(
     () => Object.values(characterState.characters),
@@ -26,7 +47,6 @@ function CharacterTabs({ characterId }: IProps) {
     })
       .then((response) => response.json())
       .then((characters) => {
-        console.debug(characters);
         dispatch(characterListReceivedAction(characters));
       });
   };
@@ -55,6 +75,14 @@ function CharacterTabs({ characterId }: IProps) {
           </Link>
         </li>
       ))}
+      <li>
+        <button
+          onClick={createNew}
+          className="block py-2 px-4 border-l border-gray-900 hover:bg-gray-100 cursor-pointer h-full"
+        >
+          <PlusCircleIcon className="w-4" />
+        </button>
+      </li>
     </ul>
   );
 }

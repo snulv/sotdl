@@ -6,6 +6,9 @@ const handlePost = async (query, body) => {
   try {
     return await prisma.attribute.create({
       data: body,
+      include: {
+        subAttributes: true,
+      },
     });
   } catch (e) {
     console.debug(e);

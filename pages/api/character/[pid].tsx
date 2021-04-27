@@ -31,7 +31,11 @@ const handleGet = async (query, body) => {
         id: Number(query.pid),
       },
       include: {
-        attributes: true,
+        attributes: {
+          include: {
+            subAttributes: true,
+          },
+        },
       },
     });
   } catch (e) {

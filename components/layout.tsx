@@ -14,9 +14,9 @@ function layout({ children }: IProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow flex flex-col">{children}</main>
 
-      <footer className="flex-grow-0 flex justify-center py-4">
+      <footer className="flex-grow-0 flex justify-center py-4 border-t border-gray-900">
         Tradition is not the worship of ashes, but keeping the flame alive.
       </footer>
     </div>

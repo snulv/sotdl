@@ -8,18 +8,32 @@ const handlePut = async (query, body) => {
   }
 
   try {
-    await prisma.attribute.update({
-      data: body,
+    const { subAttributes, ...data } = body;
+    if (subAttributes) {
+      for (const subAttr of subAttributes) {
+        const { id, ...subAttrData } = subAttr;
+        await prisma.subAttribute.update({
+          data: subAttrData,
+          where: {
+            id: Number(id),
+          },
+        });
+      }
+    }
+
+    return await prisma.attribute.update({
+      data,
       where: {
         id: Number(query.pid),
+      },
+      include: {
+        subAttributes: true,
       },
     });
   } catch (e) {
     console.debug(e);
     return;
   }
-
-  return { update: "OK" };
 };
 
 const handlePost = async (query, body) => {

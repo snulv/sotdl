@@ -1,11 +1,11 @@
 import { Attribute } from "@prisma/client";
 import React from "react";
-import { useAppContext } from "../../context/state";
+import { AttributeDetails, useAppContext } from "../../context/state";
 import { toggleAttributeFocusAction } from "../../context/characterReducer";
 import AttributeList from "./attributeList";
 
 interface WeaponListProps {
-  attributes: Attribute[];
+  attributes: AttributeDetails[];
   characterId: number;
 }
 

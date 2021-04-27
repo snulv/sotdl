@@ -1,11 +1,10 @@
-import { Attribute } from "@prisma/client";
 import React, { ReactNode, useState } from "react";
 import {
   CheckCircleIcon,
   PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/solid";
-import { useAppContext } from "../../context/state";
+import { AttributeDetails, useAppContext } from "../../context/state";
 import { attributeCreatedAction } from "../../context/characterReducer";
 
 interface AttributeListProps {
@@ -32,8 +31,6 @@ export default function AttributeList({
       type,
       description: "",
       value: 0,
-      max: 0,
-      current: 0,
       characterId,
     };
     fetch(`/api/attribute`, {
@@ -44,7 +41,7 @@ export default function AttributeList({
       body: JSON.stringify(newAttribute),
     })
       .then((data) => data.json())
-      .then((attribute: Attribute) => {
+      .then((attribute: AttributeDetails) => {
         setName("");
         setIsCreating(false);
 

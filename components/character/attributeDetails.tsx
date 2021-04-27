@@ -1,12 +1,14 @@
-import { Attribute } from "@prisma/client";
 import React from "react";
 import Input from "../input";
-import { useAppContext } from "../../context/state";
+import {
+  AttributeDetails as IAttributeDetails,
+  useAppContext,
+} from "../../context/state";
 import { toggleAttributeFocusAction } from "../../context/characterReducer";
 import { XCircleIcon } from "@heroicons/react/solid";
 
 interface AttributeDetailsProps {
-  attributes: Attribute[];
+  attributes: IAttributeDetails[];
 }
 
 export default function AttributeDetails({

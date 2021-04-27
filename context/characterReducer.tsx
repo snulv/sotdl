@@ -1,13 +1,12 @@
-import { Character, Attribute } from "@prisma/client";
-import deepEqual from "deep-equal";
-import { CharacterDetails } from "./state";
+import { Character } from "@prisma/client";
+import { AttributeDetails, CharacterDetails } from "./state";
 
 export interface ICharacterState {
   characters: {
     [id: number]: Character;
   };
   attributes: {
-    [id: number]: Attribute;
+    [id: number]: AttributeDetails;
   };
   focusedAttributes: number[];
 }
@@ -36,15 +35,31 @@ export const characterDetailsReceivedAction = (character: CharacterDetails) =>
 
 export const characterCreatedAction = (character: Character) =>
   ({
-    type: "NEW_CHARACTER_CREATED",
+    type: "CHARACTER_CREATED",
     payload: {
       character,
     },
   } as const);
 
-export const attributeCreatedAction = (attribute: Attribute) =>
+export const characterUpdatedAction = (character: Character) =>
   ({
-    type: "NEW_ATTRIBUTE_CREATED",
+    type: "CHARACTER_UPDATED",
+    payload: {
+      character,
+    },
+  } as const);
+
+export const attributeCreatedAction = (attribute: AttributeDetails) =>
+  ({
+    type: "ATTRIBUTE_CREATED",
+    payload: {
+      attribute,
+    },
+  } as const);
+
+export const attributeUpdatedAction = (attribute: AttributeDetails) =>
+  ({
+    type: "ATTRIBUTE_UPDATED",
     payload: {
       attribute,
     },
@@ -62,7 +77,9 @@ export type CHARACTER_ACTION_TYPES =
   | ReturnType<typeof characterListReceivedAction>
   | ReturnType<typeof characterDetailsReceivedAction>
   | ReturnType<typeof characterCreatedAction>
+  | ReturnType<typeof characterUpdatedAction>
   | ReturnType<typeof attributeCreatedAction>
+  | ReturnType<typeof attributeUpdatedAction>
   | ReturnType<typeof toggleAttributeFocusAction>;
 
 export const characterReducer = (
@@ -130,7 +147,7 @@ export const characterReducer = (
         stateWithCharacter
       );
     }
-    case "NEW_CHARACTER_CREATED": {
+    case "CHARACTER_CREATED": {
       return {
         ...state,
         characters: {
@@ -139,7 +156,25 @@ export const characterReducer = (
         },
       };
     }
-    case "NEW_ATTRIBUTE_CREATED": {
+    case "CHARACTER_UPDATED": {
+      return {
+        ...state,
+        characters: {
+          ...state.characters,
+          [action.payload.character.id]: action.payload.character,
+        },
+      };
+    }
+    case "ATTRIBUTE_CREATED": {
+      return {
+        ...state,
+        attributes: {
+          ...state.attributes,
+          [action.payload.attribute.id]: action.payload.attribute,
+        },
+      };
+    }
+    case "ATTRIBUTE_UPDATED": {
       return {
         ...state,
         attributes: {

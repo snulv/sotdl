@@ -26,14 +26,23 @@ model Character {
 }
 
 model Attribute {
+  id                Int       @id @default(autoincrement())
+  name              String
+  type              String    @default("Base")
+  description       String?
+  value             Int       @default(0)
+  characterId       Int
+  updatedAt         DateTime @updatedAt @default(now())
+  character         Character @relation(fields: [characterId], references: [id])
+  subAttributes     SubAttribute[]
+}
+
+model SubAttribute {
   id          Int       @id @default(autoincrement())
-  name        String
   type        String    @default("Base")
   description String?
   value       Int       @default(0)
-  max         Int       @default(0)
-  current     Int       @default(0)
-  characterId Int
-  updatedAt   DateTime @updatedAt @default(now())
-  character   Character @relation(fields: [characterId], references: [id])
+  attributeId Int
+  updatedAt   DateTime  @updatedAt @default(now())
+  character   Attribute @relation(fields: [attributeId], references: [id])
 }

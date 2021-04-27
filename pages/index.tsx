@@ -52,14 +52,21 @@ export default function Home({ characters }: HomeProps) {
   };
   return (
     <Layout>
-      <div className="flex justify-center items-center">
+      <div className="flex-grow flex justify-center items-center">
         <div>
-          <button onClick={createNew}>Add new character</button>
-          <ul className="flex flex-col">
+          <button
+            onClick={createNew}
+            className="border-b border-gray-200 hover:bg-gray-200"
+          >
+            Add new character
+          </button>
+          <ul className="flex flex-col divide-y divide-gray-200">
             {reducedCharacters.map((character) => (
               <li key={character.id}>
                 <Link href={`/character/${character.id}`}>
-                  {character.name || "Unnamed"}
+                  <span className="hover:bg-gray-200 block cursor-pointer">
+                    {character.name || "Unnamed"}
+                  </span>
                 </Link>
               </li>
             ))}
