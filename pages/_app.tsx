@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
-import { AppWrapper } from "../context/state";
+import { AppWrapper } from "../utility/state";
 
 function MyApp({ Component, pageProps }) {
   return (

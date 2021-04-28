@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SubAttribute } from "@prisma/client";
-import { AttributeDetails, useAppContext } from "../../context/state";
-import { attributeCreatedAction } from "../../context/characterReducer";
+import { AttributeDetails, useAppContext } from "../../utility/state";
+import { attributeCreatedAction } from "../../utility/characterReducer";
 
 interface MultiplierProps {
   characterId: number;

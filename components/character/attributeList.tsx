@@ -4,8 +4,8 @@ import {
   PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/solid";
-import { AttributeDetails, useAppContext } from "../../context/state";
-import { attributeCreatedAction } from "../../context/characterReducer";
+import { AttributeDetails, useAppContext } from "../../utility/state";
+import { attributeCreatedAction } from "../../utility/characterReducer";
 
 interface AttributeListProps {
   children: ReactNode;

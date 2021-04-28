@@ -1,7 +1,7 @@
 import { Attribute } from "@prisma/client";
 import React from "react";
-import { AttributeDetails, useAppContext } from "../../context/state";
-import { toggleAttributeFocusAction } from "../../context/characterReducer";
+import { AttributeDetails, useAppContext } from "../../utility/state";
+import { toggleAttributeFocusAction } from "../../utility/characterReducer";
 import AttributeList from "./attributeList";
 
 interface CoreAttributeListProps {

@@ -1,5 +1,6 @@
 import { Character } from "@prisma/client";
 import { AttributeDetails, CharacterDetails } from "./state";
+import { act } from "react-dom/test-utils";
 
 export interface ICharacterState {
   characters: {
@@ -73,6 +74,30 @@ export const toggleAttributeFocusAction = (attributeId: number) =>
     },
   } as const);
 
+export const attributeValueUpdatedAction = (
+  id: number,
+  attribute: Partial<AttributeDetails>
+) =>
+  ({
+    type: "ATTRIBUTE_VALUE_UPDATED",
+    payload: {
+      id,
+      attribute,
+    },
+  } as const);
+
+export const characterValueUpdatedAction = (
+  id: number,
+  character: Partial<Character>
+) =>
+  ({
+    type: "CHARACTER_VALUE_UPDATED",
+    payload: {
+      id,
+      character,
+    },
+  } as const);
+
 export type CHARACTER_ACTION_TYPES =
   | ReturnType<typeof characterListReceivedAction>
   | ReturnType<typeof characterDetailsReceivedAction>
@@ -80,7 +105,9 @@ export type CHARACTER_ACTION_TYPES =
   | ReturnType<typeof characterUpdatedAction>
   | ReturnType<typeof attributeCreatedAction>
   | ReturnType<typeof attributeUpdatedAction>
-  | ReturnType<typeof toggleAttributeFocusAction>;
+  | ReturnType<typeof toggleAttributeFocusAction>
+  | ReturnType<typeof attributeValueUpdatedAction>
+  | ReturnType<typeof characterValueUpdatedAction>;
 
 export const characterReducer = (
   state: ICharacterState,
@@ -180,6 +207,40 @@ export const characterReducer = (
         attributes: {
           ...state.attributes,
           [action.payload.attribute.id]: action.payload.attribute,
+        },
+      };
+    }
+    case "ATTRIBUTE_VALUE_UPDATED": {
+      const attribute = state.attributes[action.payload.id];
+      if (!attribute) {
+        return state;
+      }
+
+      return {
+        ...state,
+        attributes: {
+          ...state.attributes,
+          [action.payload.id]: {
+            ...attribute,
+            ...action.payload.attribute,
+          },
+        },
+      };
+    }
+    case "CHARACTER_VALUE_UPDATED": {
+      const character = state.characters[action.payload.id];
+      if (!character) {
+        return state;
+      }
+
+      return {
+        ...state,
+        characters: {
+          ...state.characters,
+          [action.payload.id]: {
+            ...character,
+            ...action.payload.character,
+          },
         },
       };
     }

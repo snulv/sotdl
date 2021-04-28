@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useMemo } from "react";
-import { useAppContext } from "../../context/state";
+import { useAppContext } from "../../utility/state";
 import {
   characterCreatedAction,
   characterListReceivedAction,
-} from "../../context/characterReducer";
+} from "../../utility/characterReducer";
 import Link from "next/link";
 import { useInterval, useMount } from "react-use";
 import { useRouter } from "next/router";

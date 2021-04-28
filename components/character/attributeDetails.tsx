@@ -3,9 +3,10 @@ import Input from "../input";
 import {
   AttributeDetails as IAttributeDetails,
   useAppContext,
-} from "../../context/state";
-import { toggleAttributeFocusAction } from "../../context/characterReducer";
+} from "../../utility/state";
+import { toggleAttributeFocusAction } from "../../utility/characterReducer";
 import { XCircleIcon } from "@heroicons/react/solid";
+import AttributeInput from "./attributeInput";
 
 interface AttributeDetailsProps {
   attributes: IAttributeDetails[];
@@ -30,8 +31,7 @@ export default function AttributeDetails({
               </label>
               <div className="flex items-center">
                 <div className="w-6/6">
-                  <Input
-                    endpoint="attribute"
+                  <AttributeInput
                     id={attribute.id}
                     field="name"
                     defaultValue={attribute.name}
@@ -51,12 +51,11 @@ export default function AttributeDetails({
               <label htmlFor="description" className="capitalize text-xs">
                 Description
               </label>
-              <Input
-                endpoint="attribute"
+              <AttributeInput
                 id={attribute.id}
                 field="description"
                 defaultValue={attribute.description}
-                area
+                type="area"
                 className="border-gray-500 leading-4 border rounded-sm p-1"
               />
             </div>

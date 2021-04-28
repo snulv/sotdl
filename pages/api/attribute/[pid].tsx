@@ -66,7 +66,7 @@ export default async (req, res) => {
   const response = await handledMethods[req.method](req.query, req.body);
 
   if (!response) {
-    res.status(400).json({ error: "Not handled sis" });
+    res.status(500).json({ error: "Not handled sis" });
     return;
   }
 

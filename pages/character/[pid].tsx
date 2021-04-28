@@ -5,11 +5,11 @@ import Layout from "../../components/layout";
 import AttributeField from "../../components/character/attributeField";
 import BaseInfoField from "../../components/character/baseInfoField";
 import CoreAttributeList from "../../components/character/coreAttributeList";
-import { CharacterDetails, useAppContext } from "../../context/state";
+import { CharacterDetails, useAppContext } from "../../utility/state";
 import AttributeDetails from "../../components/character/attributeDetails";
-import useCharacterDetailsState from "../../context/useCharacterDetailsState";
+import useCharacterDetailsState from "../../utility/useCharacterDetailsState";
 import { useInterval } from "react-use";
-import { characterDetailsReceivedAction } from "../../context/characterReducer";
+import { characterDetailsReceivedAction } from "../../utility/characterReducer";
 import CharacterTabs from "../../components/character/characterTabs";
 import WeaponList from "../../components/character/weaponList";
 
@@ -59,7 +59,7 @@ export default function Home({ character: defaultCharacter }: HomeProps) {
       .then((character) => {
         dispatch(characterDetailsReceivedAction(character));
       });
-  }, 5000);
+  }, 50000);
 
   if (!character) {
     return <Layout>Character not found</Layout>;

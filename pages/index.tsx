@@ -4,11 +4,11 @@ import { Character, PrismaClient } from "@prisma/client";
 import React, { useEffect, useMemo } from "react";
 import Layout from "../components/layout";
 import { useRouter } from "next/router";
-import { useAppContext } from "../context/state";
+import { useAppContext } from "../utility/state";
 import {
   characterCreatedAction,
   characterListReceivedAction,
-} from "../context/characterReducer";
+} from "../utility/characterReducer";
 
 const prisma = new PrismaClient();
 
